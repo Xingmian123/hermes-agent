@@ -522,6 +522,12 @@ PLATFORM_HINTS = {
         "documents. You can also include image URLs in markdown format "
         "![alt](url) and they will be sent as native media."
     ),
+    "api_server": (
+        "You're responding through an API server. The rendering layer is unknown — "
+        "assume plain text. No markdown formatting (no asterisks, bullets, headers, "
+        "code fences). Treat this like a conversation, not a document. Keep responses "
+        "brief and natural."
+    ),
 }
 
 # ---------------------------------------------------------------------------
