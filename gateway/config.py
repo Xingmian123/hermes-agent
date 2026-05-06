@@ -108,6 +108,7 @@ class Platform(Enum):
     BLUEBUBBLES = "bluebubbles"
     QQBOT = "qqbot"
     YUANBAO = "yuanbao"
+    WS_DIRECT = "ws_direct"
     @classmethod
     def _missing_(cls, value):
         """Accept unknown platform names only for known plugin adapters.
@@ -230,7 +231,7 @@ class SessionResetPolicy:
     at_hour: int = 4  # Hour for daily reset (0-23, local time)
     idle_minutes: int = 1440  # Minutes of inactivity before reset (24 hours)
     notify: bool = True  # Send a notification to the user when auto-reset occurs
-    notify_exclude_platforms: tuple = ("api_server", "webhook")  # Platforms that don't get reset notifications
+    notify_exclude_platforms: tuple = ("api_server", "webhook", "ws_direct")  # Platforms that don't get reset notifications
     
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -254,7 +255,7 @@ class SessionResetPolicy:
             at_hour=at_hour if at_hour is not None else 4,
             idle_minutes=idle_minutes if idle_minutes is not None else 1440,
             notify=_coerce_bool(notify, True),
-            notify_exclude_platforms=tuple(exclude) if exclude is not None else ("api_server", "webhook"),
+            notify_exclude_platforms=tuple(exclude) if exclude is not None else ("api_server", "webhook", "ws_direct"),
         )
 
 
@@ -365,6 +366,7 @@ _PLATFORM_CONNECTED_CHECKERS: dict[Platform, Callable[[PlatformConfig], bool]] =
     Platform.SMS: lambda cfg: bool(os.getenv("TWILIO_ACCOUNT_SID")),
     Platform.API_SERVER: lambda cfg: True,
     Platform.WEBHOOK: lambda cfg: True,
+    Platform.WS_DIRECT: lambda cfg: True,
     Platform.FEISHU: lambda cfg: bool(cfg.extra.get("app_id")),
     Platform.WECOM: lambda cfg: bool(cfg.extra.get("bot_id")),
     Platform.WECOM_CALLBACK: lambda cfg: bool(
@@ -1566,6 +1568,25 @@ def _apply_env_overrides(config: GatewayConfig) -> None:
         yuanbao_group_allow_from = os.getenv("YUANBAO_GROUP_ALLOW_FROM")
         if yuanbao_group_allow_from:
             extra["group_allow_from"] = yuanbao_group_allow_from
+
+    # WebSocket Direct
+    ws_direct_enabled = os.getenv("WS_DIRECT_ENABLED", "").lower() in ("true", "1", "yes")
+    ws_direct_key = os.getenv("WS_DIRECT_KEY", "")
+    ws_direct_host = os.getenv("WS_DIRECT_HOST")
+    ws_direct_port = os.getenv("WS_DIRECT_PORT")
+    if ws_direct_enabled or ws_direct_key:
+        if Platform.WS_DIRECT not in config.platforms:
+            config.platforms[Platform.WS_DIRECT] = PlatformConfig()
+        config.platforms[Platform.WS_DIRECT].enabled = True
+        if ws_direct_key:
+            config.platforms[Platform.WS_DIRECT].extra["key"] = ws_direct_key
+        if ws_direct_host:
+            config.platforms[Platform.WS_DIRECT].extra["host"] = ws_direct_host
+        if ws_direct_port:
+            try:
+                config.platforms[Platform.WS_DIRECT].extra["port"] = int(ws_direct_port)
+            except ValueError:
+                pass
 
     # Session settings
     idle_minutes = os.getenv("SESSION_IDLE_MINUTES")

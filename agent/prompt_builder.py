@@ -507,11 +507,20 @@ PLATFORM_HINTS = {
         "  1. Call yb_search_sticker with a Chinese keyword (e.g. '666', '比心', '吃瓜', "
         "     '捂脸', '合十') to discover matching sticker_ids.\n"
         "  2. Call yb_send_sticker with the chosen sticker_id or name — this sends a real "
-        "     TIMFaceElem that renders as a native sticker in the chat.\n"
+        "TIMFaceElem that renders as a native sticker in the chat.\n"
         "DO NOT draw sticker-like PNGs with execute_code/Pillow/matplotlib and then send "
         "them via MEDIA: or send_image_file. That produces a fake low-quality 'sticker' "
         "image and is the WRONG path. Bare Unicode emoji in text is also not a substitute "
         "— when a sticker is the right response, use yb_send_sticker."
+    ),
+    "ws_direct": (
+        "You are connected via a WebSocket direct connection. "
+        "Full markdown is supported. You can send media files natively: "
+        "include MEDIA:/absolute/path/to/file in your response. Images "
+        "(.png, .jpg, .webp) appear as photos, audio as voice messages, "
+        "video (.mp4) plays inline, and other files arrive as downloadable "
+        "documents. You can also include image URLs in markdown format "
+        "![alt](url) and they will be sent as native media."
     ),
 }
 

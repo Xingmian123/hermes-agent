@@ -101,6 +101,7 @@ _PLATFORM_DEFAULTS: dict[str, dict[str, Any]] = {
     "webhook":         _TIER_MINIMAL,
     "homeassistant":   _TIER_MINIMAL,
     "api_server":      {**_TIER_HIGH, "tool_preview_length": 0},
+    "ws_direct":       _TIER_HIGH,
 }
 
 # Canonical set of per-platform overrideable keys (for validation).

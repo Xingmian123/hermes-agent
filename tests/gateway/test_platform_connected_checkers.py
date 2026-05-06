@@ -76,7 +76,7 @@ def test_checker_returns_true_when_configured(platform, checker, monkeypatch):
     elif platform == Platform.SMS:
         monkeypatch.setenv("TWILIO_ACCOUNT_SID", "ACtest")
         mock_config.extra = {}
-    elif platform in (Platform.API_SERVER, Platform.WEBHOOK, Platform.WHATSAPP):
+    elif platform in (Platform.API_SERVER, Platform.WEBHOOK, Platform.WHATSAPP, Platform.WS_DIRECT):
         mock_config.extra = {}
     elif platform == Platform.FEISHU:
         mock_config.extra = {"app_id": "app"}

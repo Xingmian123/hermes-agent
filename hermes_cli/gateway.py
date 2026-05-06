@@ -2990,6 +2990,28 @@ _PLATFORMS = [
              "help": "The App Secret (used for HMAC signing) from your Yuanbao IM Bot."},
         ],
     },
+    {
+        "key": "ws_direct",
+        "label": "WebSocket Direct",
+        "emoji": "🔌",
+        "token_var": "WS_DIRECT_ENABLED",
+        "setup_instructions": [
+            "1. Set WS_DIRECT_ENABLED=true to enable the WebSocket server",
+            "2. Set WS_DIRECT_KEY to a secret key for authentication (recommended)",
+            "3. Configure WS_DIRECT_HOST (default: 127.0.0.1) and WS_DIRECT_PORT (default: 8650)",
+            "4. Connect your WebSocket client to ws://<host>:<port>/ws",
+        ],
+        "vars": [
+            {"name": "WS_DIRECT_ENABLED", "prompt": "Enable WebSocket Direct (true/false)", "password": False,
+             "help": "Set to 'true' to enable the WebSocket direct connection server."},
+            {"name": "WS_DIRECT_KEY", "prompt": "Authentication key (recommended, or empty to skip)", "password": True,
+             "help": "Secret key for WebSocket client authentication. Generate with: openssl rand -hex 32"},
+            {"name": "WS_DIRECT_HOST", "prompt": "Bind address (default: 127.0.0.1)", "password": False,
+             "help": "The host address to bind the WebSocket server to."},
+            {"name": "WS_DIRECT_PORT", "prompt": "Bind port (default: 8650)", "password": False,
+             "help": "The port number for the WebSocket server."},
+        ],
+    },
 ]
 def _all_platforms() -> list[dict]:
     """Return the full list of platforms for setup menus.
